@@ -107,12 +107,12 @@ graph readFile(){
     return g;
 }
 
-int *getVertices(int n, int edge[n][3]){
-    int done[100] = {0}; // assuming vertices are less than 100
+int *getVertices(int V, int edgeCount, int edge[edgeCount][3]){
+    int *done = (int *)calloc(V, sizeof(int)); 
     
-    int *vertices = malloc((n) * sizeof(int));
+    int *vertices = malloc((edgeCount + 1) * sizeof(int));
     int idx = 0;
-    for(int i = 0; i < n; i++){
+    for(int i = 0; i < edgeCount; i++){
         for (int j = 0; j < 2; j++){
             if (!done[edge[i][j]]){ // if vertex has not been added to the list
                 done[edge[i][j]] = 1; // mark as added
@@ -120,6 +120,7 @@ int *getVertices(int n, int edge[n][3]){
             }
         }
     }
+    free(done);
     return vertices;
 }
 
@@ -145,7 +146,7 @@ int main(){
     printf("Minimum Weight (for at least k=%d): %d\n", g.k, r.cost);
     printf("Tree Size Found: %d nodes\n", r.e + 1); // + 1 since edges = v - 1
     printf("Vertices in the tree: ");
-    int *vertices = getVertices(r.e + 1, r.edge);
+    int *vertices = getVertices(g.v, r.e, r.edge);
     for (int i = 0; i <= r.e; i++) {
         printf("%d ", vertices[i]);
     }
